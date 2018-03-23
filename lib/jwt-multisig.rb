@@ -29,12 +29,10 @@ module JWT
       #   "signature":"DtEhU3ljbEg8L38VWAfUAqOyKAM6-Xx-F4GawxaepmXFCgfTjDxw5djxLa8ISlSApmWQxfKTUJqPP3-Kg6NU1Q"
       # }
       def generate_jws(payload, key_id, key_value, algorithm)
-        # binding.pry
-
         key = if algorithm.start_with?('HS')
-          OpenSSL::PKey === key_value ? key_value.to_pem : key_value
+          OpenSSL::PKey::PKey === key_value ? key_value.to_pem : key_value
         else
-          OpenSSL::PKey === key_value ? key_value : OpenSSL::PKey.read(key_value)
+          OpenSSL::PKey::PKey === key_value ? key_value : OpenSSL::PKey.read(key_value)
         end
 
         protected, _, signature = JWT.encode(payload, key, algorithm).split(".")
