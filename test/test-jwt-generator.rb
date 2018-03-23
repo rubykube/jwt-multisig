@@ -36,8 +36,9 @@ class JWTEncoderTest < Test::Unit::TestCase
 
   def test_3
     signers = %w[ olsonjacobi.name ebert.biz ]
-    assert_raises JWT::EncodeError do
+    e = assert_raises JWT::EncodeError do
       JWT::Multisig.generate_jwt({}, private_keychain.slice(*signers), algorithms.slice(signers.sample))
     end
+    assert_match(/\bkey not found\b/i, e.message)
   end
 end

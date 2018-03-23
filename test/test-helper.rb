@@ -35,7 +35,10 @@ module TestHelper
   memoize :algorithms
 
   def public_keychain
-    keys.each_with_object({}) { |(id, key), memo| memo[id] = key.public_key.to_pem }.freeze
+    keys.each_with_object({}) do |(id, key), memo|
+      # HMAC uses single secret for encoding & decoding.
+      memo[id] = algorithms.fetch(id).start_with?("HS") ? key.to_pem : key.public_key.to_pem
+    end.freeze
   end
   memoize :public_keychain
 
