@@ -5,6 +5,9 @@ require "jwt"
 require "openssl"
 
 module JWT
+  #
+  # The module provides tools for encoding/decoding JWT with multiple signatures.
+  #
   module Multisig
     class << self
       def generate_jwt(payload, keychain, algorithms)
@@ -48,7 +51,7 @@ module JWT
           signature          = jws.fetch("signature")
           public_key         = public_keychain.fetch(jws.fetch("header").fetch("kid"))
           jwt                = [encoded_header, encoded_payload, signature].join(".")
-          algorithm          = JSON.load(serialized_header).fetch("alg")
+          algorithm          = JSON.parse(serialized_header).fetch("alg")
           JWT.decode(jwt, prepare(public_key, algorithm), true, options.merge(algorithms: [algorithm])).first
         end
       end
@@ -57,7 +60,7 @@ module JWT
 
       def proxy_exception(exception_class)
         yield
-      rescue => e
+      rescue StandardError => e
         exception_class === e ? raise(e) : raise(exception_class, e.inspect)
       end
 
@@ -69,12 +72,12 @@ module JWT
         end
       end
 
-      def base64_encode(x)
-        JWT::Encode.base64url_encode(x)
+      def base64_encode(string)
+        JWT::Encode.base64url_encode(string)
       end
 
-      def base64_decode(x)
-        JWT::Decode.base64url_decode(x)
+      def base64_decode(string)
+        JWT::Decode.base64url_decode(string)
       end
     end
   end

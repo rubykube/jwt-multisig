@@ -4,8 +4,9 @@
 require_relative "test-helper"
 
 class JWTEncoderTest < Test::Unit::TestCase
+  # rubocop:disable Style/NumericLiterals
   def test_encoding_with_two_signers
-    signers  = %w[ okon.info gerhold.co ]
+    signers  = %w[okon.info gerhold.co]
     payload  = {
       user: { email: "orlo@reynoldsoconnell.co", role: "admin" },
       iat:  1521823259,
@@ -18,9 +19,11 @@ class JWTEncoderTest < Test::Unit::TestCase
     returned = JWT::Multisig.generate_jwt(payload, private_keychain.slice(*signers), algorithms.slice(*signers))
     assert_equal expected, JSON.dump(returned)
   end
+  # rubocop:enable Style/NumericLiterals
 
+  # rubocop:disable Style/NumericLiterals
   def test_encoding_with_four_signers
-    signers  = %w[ okon.info ebert.biz olsonjacobi.name rice.com ]
+    signers  = %w[okon.info ebert.biz olsonjacobi.name rice.com]
     payload  = {
       data: { currency: "btc", amount: "1.75", destination: "13bwBSNY9Q2ZDMcdCRM5PdjXpJuLiyLLRj" },
       iat:  1521824704,
@@ -28,14 +31,15 @@ class JWTEncoderTest < Test::Unit::TestCase
       jti:  "3fb35606-d61a-42df-8c29-d041350d8c60",
       sub:  "withdraw",
       iss:  "oharaupton",
-      aud:  ["douglas", "crist"] }
+      aud:  %w[douglas crist] }
     expected = %({"payload":{"data":{"currency":"btc","amount":"1.75","destination":"13bwBSNY9Q2ZDMcdCRM5PdjXpJuLiyLLRj"},"iat":1521824704,"exp":4577496916,"jti":"3fb35606-d61a-42df-8c29-d041350d8c60","sub":"withdraw","iss":"oharaupton","aud":["douglas","crist"]},"signatures":[{"protected":"eyJhbGciOiJSUzI1NiJ9","header":{"kid":"okon.info"},"signature":"lGqBHSPEDRK_JYhwspujZYE-ri_wS56ukF-GT-GKugr0XMsisuYUDj6NLWMBZcHbvg_TQP2LS5C_X4EJlxrJ-mHStp8KvEQtuON-E06PxrOli2j1LgwUPlwrbV9ujfqdwwRblGnOX3mDtXn0XUeWOaIoMBQV4BvfvF-6EuGFTp9bPRNnxyw135GSKxlT6s2IwxUqcXzweK-pzh-OAi6Tny22SSjtP00DqajkhNoDZ66jQMiH8939E09mZhJwABrWqd-v9Saa31RQZp_TOaLuKcMcIVNVcsqFdJyS3J7nsKvclq102lmyD9dZVwteTNOtmpdytpSNoIXK0piBBK3OZ_uYQKkM7dlw-TzIqedTCkpXpxm_x5Q1-SQOt1LuEU4YXdcLFt-G9JrUag-olciMTylo2EISw0dVnRU9ZusX4VwZEU6Z5O0yNAOy1oJYLn72XQud1woR5BXKe9CUZb6maA7WcS5WOJpw2SmkHXVVoQBj1ZbWa6mHLk-lKO3skvk2"},{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"kid":"ebert.biz"},"signature":"sIQQyqmxM2D8U7O1g3WG2NfLo10HyqFg_fzXfhzuNATJOAxE4YR-Bz_f3srs-bEAOy_bNpfH-9FIDupYLVXpOw"},{"protected":"eyJhbGciOiJSUzM4NCJ9","header":{"kid":"olsonjacobi.name"},"signature":"ZjwWEWZYiNHGwrmbfR7KSdJI6JuqKJ5YcpsfOxs8RZ3XpG0d-7Uua_nzcnm7_DpbyXZfltmH7901gLy8XTFsnRmAeRdpgPDu7s_zTUAW-I-XIMGsGfz5oS_dzoZVjXzW82LxZAC4cZTAS-32AuNReef-SVYJVplJGsdpd633cyMm2QKxM3aQRiuQ7Ogq0tJROtHyuSF4qnmyW75KBOhAWYChc5WjNxLSpaG3WcDV_--NvyYM1INfTWeIYayTE9Y5AB611dRR9w-Cg2qh8JfhBFkOoOuZBfel5Kl94PNST1tp7oLImuuZlgpEEV0_rXd1BAbz7P-XpJEzMGcDuEFEiA"},{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"kid":"rice.com"},"signature":"rqE6POMDDY35AfoEqPI0rQhTOrGQKPDj4gT8aXC34n6Aw6tOvwx7ULaEPEfAq5T026F3nhvULBbyYP9X5okL8w"}]})
     returned = JWT::Multisig.generate_jwt(payload, private_keychain.slice(*signers), algorithms.slice(*signers))
     assert_equal expected, JSON.dump(returned)
   end
+  # rubocop:enable Style/NumericLiterals
 
   def test_encoding_with_one_signer
-    signers  = %w[ rice.com ]
+    signers  = %w[rice.com]
     payload  = { bar: "baz" }
     expected = %({"payload":{"bar":"baz"},"signatures":[{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"kid":"rice.com"},"signature":"CnjElUe4Ng1yKiLmG2d6lDWHw-HQDuH_haHM26izIcQDWKe6waF-4uTfPJrzvdh8Jw7A1MOnzUmKBKErivI9Mw"}]})
     returned = JWT::Multisig.generate_jwt(payload, private_keychain.slice(*signers), algorithms.slice(*signers))
@@ -43,7 +47,7 @@ class JWTEncoderTest < Test::Unit::TestCase
   end
 
   def test_algorithm_is_required
-    signers = %w[ olsonjacobi.name ebert.biz ]
+    signers = %w[olsonjacobi.name ebert.biz]
     e = assert_raises JWT::EncodeError do
       JWT::Multisig.generate_jwt({}, private_keychain.slice(*signers), algorithms.slice(signers.sample))
     end

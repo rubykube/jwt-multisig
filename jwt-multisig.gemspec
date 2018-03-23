@@ -1,7 +1,7 @@
 # encoding: UTF-8
 # frozen_string_literal: true
 
-require File.expand_path("../lib/jwt-multisig/version", __FILE__)
+require_relative "lib/jwt-multisig/version"
 
 Gem::Specification.new do |s|
   s.name            = "jwt-multisig"

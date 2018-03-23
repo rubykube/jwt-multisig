@@ -4,6 +4,7 @@
 require_relative "test-helper"
 
 class JWSVerificatorTest < Test::Unit::TestCase
+  # rubocop:disable Style/NumericLiterals
   def test_trivial_verification_of_signature
     jws     = %({"protected":"eyJhbGciOiJSUzUxMiJ9","header":{"kid":"okunevabednar.io"},"signature":"Lbu_mFwHTsR41og-_sbLW8HN7FXy6tLuC_4hbBWHrnj5HEh4f5RlhXvnyWdew7rXm8hflFj24ESEekFCXcydNUYAO4sr8blYFqoFJVVYoiQRTWM3zA2FzqutOufDDbqbujBpE0xTRT0UqU72kVqczRbFwIY0j-8Aby5B4w5JrUHo2AyWe10hezah886pzu6BO0pfShQZrXgRyFV4Sg63labEMwCL5nhi-bHjeH4ZrUR50NfEOqSOKglI4XniOkYXCIX7zDg4YZc6XEos3CJbh93-AJ_vMJKlJ-s-zVK5av5onI6YZMbKKlgsYL5CyxiJkJSVw4cly5eshixson1HVw"})
     payload = {
@@ -13,6 +14,7 @@ class JWSVerificatorTest < Test::Unit::TestCase
       iss:  "government" }
     example jws, payload, { verify_iss: true, iss: "government" }, payload.to_json
   end
+  # rubocop:enable Style/NumericLiterals
 
   def test_trivial_verification_of_issues
     jws     = %({"protected":"eyJhbGciOiJIUzM4NCJ9","header":{"kid":"gerhold.co"},"signature":"JQq8ZrqO3DfOXbsdfhzF7qXwAdXunAdjUX_iJoIHOqFWvB7IfHLHYcIVIBUb-AH8"})
@@ -73,13 +75,11 @@ private
 
   def example(jws, payload, options, expected)
     # Pass instance of OpenSSL::PKey::PKey.
-    binding.pry if jws.empty?
-
-    returned = JWT::Multisig.verify_jws(JSON.load(jws), payload, public_keychain, options)
+    returned = JWT::Multisig.verify_jws(JSON.parse(jws), payload, public_keychain, options)
     assert_equal expected, JSON.dump(returned)
 
     # Pass key in PEM format.
-    returned = JWT::Multisig.verify_jws(JSON.load(jws), payload, public_keychain, options)
+    returned = JWT::Multisig.verify_jws(JSON.parse(jws), payload, public_keychain, options)
     assert_equal expected, JSON.dump(returned)
   end
 end

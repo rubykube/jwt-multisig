@@ -98,3 +98,6 @@ Layout/SpaceInsideStringInterpolation:
 
 Layout/MultilineArrayBraceLayout:
   Enabled: false
+
+Layout/MultilineHashBraceLayout:
+  EnforcedStyle: same_line
