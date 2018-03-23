@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.author          = "RubyKube"
   s.email           = "support@rubykube.io"
   s.summary         = "The tool for working with multi-signature JWT."
-  s.description     = "The tool for working with JWT signed by multiple verificators as per RFC 7515. Based on gem «jwt» under the hood."
+  s.description     = "The tool for working with JWT signed by multiple " \
+                      "verificators as per RFC 7515. Based on the RubyGem «jwt» under the hood."
   s.homepage        = "https://github.com/rubykube/jwt-multisig"
   s.license         = "MIT"
   s.files           = `git ls-files -z`.split("\x0")

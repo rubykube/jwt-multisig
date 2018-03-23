@@ -10,6 +10,7 @@ module JWT
   #
   module Multisig
     class << self
+      # rubocop:disable Metrics/LineLength
       #
       # Generates new JWT based on payload, keys, and algorithms.
       #
@@ -35,6 +36,8 @@ module JWT
       #       ]
       #     }
       # @raise [JWT::EncodeError]
+      #
+      # rubocop:enable Metrics/LineLength
       def generate_jwt(payload, private_keychain, algorithms)
         proxy_exception JWT::EncodeError do
           { payload:    base64_encode(payload.to_json),
@@ -42,6 +45,7 @@ module JWT
         end
       end
 
+      # rubocop:disable Metrics/LineLength
       #
       # Verifies JWT.
       #
@@ -68,6 +72,8 @@ module JWT
       # @return [Hash]
       #   Returns payload if all signatures are valid.
       # @raise [JWT::DecodeError]
+      #
+      # rubocop:enable Metrics/LineLength
       def verify_jwt(jwt, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
           jwt.fetch("signatures").each do |jws|
@@ -99,7 +105,7 @@ module JWT
       # @raise [JWT::EncodeError]
       def generate_jws(payload, key_id, key_value, algorithm)
         proxy_exception JWT::EncodeError do
-          protected, _, signature = JWT.encode(payload, prepare(key_value, algorithm), algorithm).split(".")
+          protected, _, signature = JWT.encode(payload, to_pem_or_key(key_value, algorithm), algorithm).split(".")
           { protected: protected,
             header:    { kid: key_id },
             signature: signature }
@@ -137,19 +143,30 @@ module JWT
           public_key         = public_keychain.fetch(jws.fetch("header").fetch("kid"))
           jwt                = [encoded_header, encoded_payload, signature].join(".")
           algorithm          = JSON.parse(serialized_header).fetch("alg")
-          JWT.decode(jwt, prepare(public_key, algorithm), true, options.merge(algorithms: [algorithm])).first
+          JWT.decode(jwt, to_pem_or_key(public_key, algorithm), true, options.merge(algorithms: [algorithm])).first
         end
       end
 
     private
 
+      #
+      # Masks all caught exceptions as different exception class.
+      # @param exception_class [Class]
       def proxy_exception(exception_class)
         yield
       rescue StandardError => e
         exception_class === e ? raise(e) : raise(exception_class, e.inspect)
       end
 
-      def prepare(key, algorithm)
+      #
+      # Transforms key into string (PEM format) or returns as {OpenSSL::PKey::PKey} depending on given algorithm.
+      # This operation is needed to satisfy {JWT#encode} and {JWT#decode} APIs.
+      #
+      # @param key [String, OpenSSL::PKey::PKey]
+      # @param algorithm [String]
+      # @return [String, OpenSSL::PKey::PKey]
+      #   Returns PEM for HMAC algorithms, {OpenSSL::PKey::PKey} in other cases.
+      def to_pem_or_key(key, algorithm)
         if algorithm.start_with?("HS")
           OpenSSL::PKey::PKey === key ? key.to_pem : key
         else
@@ -157,10 +174,20 @@ module JWT
         end
       end
 
+      #
+      # Encodes string in Base64 format (URL-safe).
+      #
+      # @param string [String]
+      # @return [String]
       def base64_encode(string)
         JWT::Encode.base64url_encode(string)
       end
 
+      #
+      # Decodes string from Base64 format (URL-safe).
+      #
+      # @param string [String]
+      # @return [String]
       def base64_decode(string)
         JWT::Decode.base64url_decode(string)
       end

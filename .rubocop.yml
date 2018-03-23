@@ -101,3 +101,6 @@ Layout/MultilineArrayBraceLayout:
 
 Layout/MultilineHashBraceLayout:
   EnforcedStyle: same_line
+
+Style/AsciiComments:
+  Enabled: false
