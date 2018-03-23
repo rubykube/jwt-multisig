@@ -3,7 +3,7 @@
 
 require_relative "test-helper"
 
-class JWTEncoderTest < Test::Unit::TestCase
+class JWTGeneratorTest < Test::Unit::TestCase
   # rubocop:disable Style/NumericLiterals
   def test_encoding_with_two_signers
     signers  = %w[okon.info gerhold.co]
