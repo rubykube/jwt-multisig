@@ -30,6 +30,7 @@ GEM
       byebug (~> 10.0)
       pry (~> 0.10)
     rainbow (3.0.0)
+    rake (12.3.1)
     rubocop (0.54.0)
       parallel (~> 1.10)
       parser (>= 2.5)
@@ -51,6 +52,7 @@ DEPENDENCIES
   jwt-multisig!
   memoist (~> 0.16)
   pry-byebug (~> 3.5)
+  rake (~> 12.3)
   rubocop (~> 0.51)
   test-unit (~> 3.1)
 
