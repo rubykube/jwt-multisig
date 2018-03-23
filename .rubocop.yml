@@ -1,0 +1,100 @@
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Naming/FileName:
+  Regex: !ruby/regexp /\A[-a-z0-9]+\z/
+
+Style/Encoding:
+  Enabled: false
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+  IndentOneStep: true
+
+Layout/AccessModifierIndentation:
+  EnforcedStyle: outdent
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: true
+  Max:     120
+  Exclude:
+    - Rakefile
+    - test/**/*
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+ PreferredDelimiters:
+   default: '[]'
+   '%i':    '[]'
+   '%':     '{}'
+
+Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Lint/UselessAssignment:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/CaseEquality:
+  Enabled: false
+
+Gemspec/OrderedDependencies:
+  Enabled: false
+
+Layout/SpaceInsideStringInterpolation:
+  EnforcedStyle: space
+
+Layout/MultilineArrayBraceLayout:
+  Enabled: false
