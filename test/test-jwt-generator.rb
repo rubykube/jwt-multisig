@@ -4,7 +4,7 @@
 require_relative "test-helper"
 
 class JWTEncoderTest < Test::Unit::TestCase
-  def test_1
+  def test_encoding_with_two_signers
     signers  = %w[ okon.info gerhold.co ]
     payload  = {
       user: { email: "orlo@reynoldsoconnell.co", role: "admin" },
@@ -19,7 +19,7 @@ class JWTEncoderTest < Test::Unit::TestCase
     assert_equal expected, JSON.dump(returned)
   end
 
-  def test_2
+  def test_encoding_with_four_signers
     signers  = %w[ okon.info ebert.biz olsonjacobi.name rice.com ]
     payload  = {
       data: { currency: "btc", amount: "1.75", destination: "13bwBSNY9Q2ZDMcdCRM5PdjXpJuLiyLLRj" },
@@ -34,11 +34,19 @@ class JWTEncoderTest < Test::Unit::TestCase
     assert_equal expected, JSON.dump(returned)
   end
 
-  def test_3
+  def test_encoding_with_one_signer
+    signers  = %w[ rice.com ]
+    payload  = { bar: "baz" }
+    expected = %({"payload":{"bar":"baz"},"signatures":[{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"kid":"rice.com"},"signature":"CnjElUe4Ng1yKiLmG2d6lDWHw-HQDuH_haHM26izIcQDWKe6waF-4uTfPJrzvdh8Jw7A1MOnzUmKBKErivI9Mw"}]})
+    returned = JWT::Multisig.generate_jwt(payload, private_keychain.slice(*signers), algorithms.slice(*signers))
+    assert_equal expected, JSON.dump(returned)
+  end
+
+  def test_algorithm_is_required
     signers = %w[ olsonjacobi.name ebert.biz ]
     e = assert_raises JWT::EncodeError do
       JWT::Multisig.generate_jwt({}, private_keychain.slice(*signers), algorithms.slice(signers.sample))
     end
-    assert_match(/\bkey not found\b/i, e.message)
+    assert_match(/key not found/i, e.message)
   end
 end
