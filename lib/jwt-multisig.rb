@@ -16,10 +16,10 @@ module JWT
 
       def verify_jwt(jwt, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
-          jwt.fetch('signatures').each do |jws|
-            verify_jws(jws, public_keychain, jws.fetch('payload'), options)
+          jwt.fetch("signatures").each do |jws|
+            verify_jws(jws, public_keychain, jws.fetch("payload"), options)
           end
-          JSON.parse(jwt.fetch('payload'))
+          JSON.parse(jwt.fetch("payload"))
         end
       end
 
@@ -32,7 +32,7 @@ module JWT
       # }
       def generate_jws(payload, key_id, key_value, algorithm)
         proxy_exception JWT::EncodeError do
-          key = if algorithm.start_with?('HS')
+          key = if algorithm.start_with?("HS")
             OpenSSL::PKey::PKey === key_value ? key_value.to_pem : key_value
           else
             OpenSSL::PKey::PKey === key_value ? key_value : OpenSSL::PKey.read(key_value)
@@ -47,12 +47,12 @@ module JWT
 
       def verify_jws(jws, public_keychain, payload, options = {})
         proxy_exception JWT::DecodeError do
-          serialized_header  = jws.fetch('protected')
+          serialized_header  = jws.fetch("protected")
           serialized_payload = payload.to_json
-          signature          = jws.fetch('signature')
-          public_key         = public_keychain.fetch(jws.fetch('header').fetch('kid'))
+          signature          = jws.fetch("signature")
+          public_key         = public_keychain.fetch(jws.fetch("header").fetch("kid"))
           jwt                = [serialized_header, serialized_payload, signature]
-          JWT.decode(jwt, public_key, true, options.merge(algorithms: JSON.load(serialized_header).fetch('alg')))
+          JWT.decode(jwt, public_key, true, options.merge(algorithms: JSON.load(serialized_header).fetch("alg"))).first
         end
       end
 
