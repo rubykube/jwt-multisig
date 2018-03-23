@@ -6,10 +6,10 @@ require_relative "lib/jwt-multisig/version"
 Gem::Specification.new do |s|
   s.name            = "jwt-multisig"
   s.version         = JWT::Multisig::VERSION
-  s.author          = "Rubykube"
-  s.email           = ""
-  s.summary         = ""
-  s.description     = ""
+  s.author          = "RubyKube"
+  s.email           = "support@rubykube.io"
+  s.summary         = "The tool for working with multi-signature JWT."
+  s.description     = "The tool for working with JWT signed by multiple verificators as per RFC 7515. Based on gem «jwt» under the hood."
   s.homepage        = "https://github.com/rubykube/jwt-multisig"
   s.license         = "MIT"
   s.files           = `git ls-files -z`.split("\x0")
