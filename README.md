@@ -14,4 +14,8 @@
 
 `JWT::Multisig.verify_jws(jws, payload, public_keychain, options)`
 
+`JWT::Multisig.add_jws(jwt, key_id, key_value, algorithm)`
+
+`JWT::Multisig.remove_jws(jwt, key_id)`
+
 The full documentation is available at [rubydoc.info](http://www.rubydoc.info/gems/jwt-multisig).
