@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.test_files      = `git ls-files -z -- {test,spec,features}/*`.split("\x0")
   s.require_paths   = ["lib"]
 
-  s.add_dependency             "jwt",     "~> 2.1"
-  s.add_development_dependency "bundler", "~> 1.16"
+  s.add_dependency             "jwt",           "~> 2.1"
+  s.add_dependency             "activesupport", ">= 4.0", "< 6.0"
+  s.add_development_dependency "bundler",       "~> 1.16"
 end

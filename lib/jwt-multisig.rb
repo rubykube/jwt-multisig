@@ -3,6 +3,7 @@
 
 require "jwt"
 require "openssl"
+require "active_support/core_ext/hash/keys"
 
 module JWT
   #
@@ -66,20 +67,36 @@ module JWT
       #     }
       # @param public_keychain [Hash]
       #   The hash which consists of pairs: key ID => public key.
-      #   The key may be presented as string in PEM format or as instance of {OpenSSL::PKey::PKey}
+      #   The key may be presented as string in PEM format or as instance of {OpenSSL::PKey::PKey}.
+      #   The implementation only verifies signatures for which public key exists in keychain.
       # @param options [Hash]
       #   The rules for verifying JWT. The variable «algorithms» is always overwritten by the value from JWS header.
       # @return [Hash]
-      #   Returns payload if all signatures are valid.
+      #   The returning value contains payload, list of verified, and unverified signatures (key ID).
+      #   Example:
+      #     { payload:    { sub: "session", profile: { email: "username@mailbox.example" },
+      #       verified:   ["backend-1.mycompany.example", "backend-3.mycompany.example"],
+      #       unverified: ["backend-2.mycompany.example"] }
+      #     }
       # @raise [JWT::DecodeError]
       #
       # rubocop:enable Metrics/LineLength
       def verify_jwt(jwt, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
+          serialized_payload   = jwt.fetch("payload")
+          payload              = JSON.parse(serialized_payload)
+          verified, unverified = [], []
+
           jwt.fetch("signatures").each do |jws|
-            verify_jws(jws, jws.fetch("payload"), public_keychain, options)
+            key_id = jws.fetch("header").fetch("kid")
+            if public_keychain.key?(key_id)
+              verify_jws(jws, jwt.fetch("payload"), public_keychain, options)
+              verified << key_id
+            else
+              unverified << key_id
+            end
           end
-          JSON.parse(jwt.fetch("payload"))
+          [payload.deep_symbolize_keys, verified.uniq, unverified.uniq]
         end
       end
 
@@ -127,7 +144,7 @@ module JWT
       # @param payload [Hash]
       # @param public_keychain [Hash]
       #   The hash which consists of pairs: key ID => public key.
-      #   The key may be presented as string in PEM format or as instance of {OpenSSL::PKey::PKey}
+      #   The key may be presented as string in PEM format or as instance of {OpenSSL::PKey::PKey}.
       # @param options [Hash]
       #   The rules for verifying JWT. The variable «algorithms» is always overwritten by the value from JWS header.
       # @return [Hash]
