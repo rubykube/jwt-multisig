@@ -4,6 +4,7 @@
 require "jwt"
 require "openssl"
 require "active_support/core_ext/hash/keys"
+require "active_support/core_ext/hash/slice"
 
 module JWT
   #
