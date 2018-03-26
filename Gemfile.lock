@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jwt-multisig (1.0.0)
+    jwt-multisig (1.0.0.beta.1)
       jwt (~> 2.1)
 
 GEM
@@ -16,7 +16,7 @@ GEM
     jwt (2.1.0)
     memoist (0.16.0)
     parallel (1.12.1)
-    parser (2.5.0.4)
+    parser (2.5.0.5)
       ast (~> 2.4.0)
     power_assert (1.1.1)
     powerpack (0.1.1)
