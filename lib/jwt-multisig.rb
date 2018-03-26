@@ -45,6 +45,46 @@ module JWT
       end
 
       #
+      # Generates and adds new JWS to existing JWT.
+      #
+      # @param jwt [Hash]
+      #   The existing JWT.
+      # @param key_id [String]
+      #   The JWS key ID.
+      # @param key_value [String, OpenSSL::PKey::PKey]
+      #   The private key in PEM format or as instance of {OpenSSL::PKey::PKey}.
+      # @param algorithm [String]
+      #   The signature algorithm.
+      # @return [Hash]
+      #   The JWT with added JWS.
+      # @raise [JWT::EncodeError]
+      def add_jws(jwt, key_id, key_value, algorithm)
+        proxy_exception JWT::EncodeError do
+          remove_jws(jwt, key_id).tap do |new_jwt|
+            payload = JSON.parse(base64_decode(new_jwt.fetch(:payload)))
+            new_jwt.fetch(:signatures) << generate_jws(payload, key_id, key_value, algorithm)
+          end
+        end
+      end
+
+      #
+      # Removes all JWS associated with given key ID.
+      #
+      # @param jwt [Hash]
+      #   The existing JWT.
+      # @param key_id [String]
+      #   The key ID to match JWS by.
+      # @return [Hash]
+      #   The JWT with all matched JWS removed.
+      def remove_jws(jwt, key_id)
+        jwt.deep_symbolize_keys.tap do |new_jwt|
+          new_jwt[:signatures] = new_jwt.fetch(:signatures, []).reject do |jws|
+            jws.dig(:header, :kid) == key_id
+          end
+        end
+      end
+
+      #
       # Verifies JWT.
       #
       # @param jwt [Hash]
