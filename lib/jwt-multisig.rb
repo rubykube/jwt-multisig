@@ -78,7 +78,7 @@ module JWT
       # @raise [JWT::DecodeError]
       def verify_jwt(jwt, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
-          serialized_payload = jwt.fetch("payload")
+          serialized_payload = base64_decode(jwt.fetch("payload"))
           payload            = JSON.parse(serialized_payload)
           verified           = []
           unverified         = []
@@ -86,13 +86,15 @@ module JWT
           jwt.fetch("signatures").each do |jws|
             key_id = jws.fetch("header").fetch("kid")
             if public_keychain.key?(key_id)
-              verify_jws(jws, jwt.fetch("payload"), public_keychain, options)
+              verify_jws(jws, payload, public_keychain, options)
               verified << key_id
             else
               unverified << key_id
             end
           end
-          [payload.deep_symbolize_keys, verified.uniq, unverified.uniq]
+          { payload:    payload.deep_symbolize_keys,
+            verified:   verified.uniq,
+            unverified: unverified.uniq }
         end
       end
 
