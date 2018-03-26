@@ -16,7 +16,7 @@ class JWSVerificatorTest < Test::Unit::TestCase
   end
   # rubocop:enable Style/NumericLiterals
 
-  def test_trivial_verification_of_issues
+  def test_trivial_verification_of_issuer
     jws     = %({"protected":"eyJhbGciOiJIUzM4NCJ9","header":{"kid":"gerhold.co"},"signature":"JQq8ZrqO3DfOXbsdfhzF7qXwAdXunAdjUX_iJoIHOqFWvB7IfHLHYcIVIBUb-AH8"})
     payload = { data: { x: 1 }, iss: "ryaneffertz" }
     e       = assert_raise { example jws, payload, { verify_iss: true, iss: "schumm" }, payload.to_json }
