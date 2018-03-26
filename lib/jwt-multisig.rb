@@ -11,7 +11,6 @@ module JWT
   #
   module Multisig
     class << self
-      # rubocop:disable Metrics/LineLength
       #
       # Generates new JWT based on payload, keys, and algorithms.
       #
@@ -37,8 +36,6 @@ module JWT
       #       ]
       #     }
       # @raise [JWT::EncodeError]
-      #
-      # rubocop:enable Metrics/LineLength
       def generate_jwt(payload, private_keychain, algorithms)
         proxy_exception JWT::EncodeError do
           { payload:    base64_encode(payload.to_json),
@@ -46,7 +43,6 @@ module JWT
         end
       end
 
-      # rubocop:disable Metrics/LineLength
       #
       # Verifies JWT.
       #
@@ -79,13 +75,12 @@ module JWT
       #       unverified: ["backend-2.mycompany.example"] }
       #     }
       # @raise [JWT::DecodeError]
-      #
-      # rubocop:enable Metrics/LineLength
       def verify_jwt(jwt, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
-          serialized_payload   = jwt.fetch("payload")
-          payload              = JSON.parse(serialized_payload)
-          verified, unverified = [], []
+          serialized_payload = jwt.fetch("payload")
+          payload            = JSON.parse(serialized_payload)
+          verified           = []
+          unverified         = []
 
           jwt.fetch("signatures").each do |jws|
             key_id = jws.fetch("header").fetch("kid")

@@ -38,6 +38,7 @@ Metrics/LineLength:
   Exclude:
     - Rakefile
     - test/**/*
+  IgnoredPatterns: ['\A *#']
 
 Metrics/AbcSize:
   Enabled: false
