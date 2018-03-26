@@ -79,7 +79,7 @@ module JWT
       def remove_jws(jwt, key_id)
         jwt.deep_symbolize_keys.tap do |new_jwt|
           new_jwt[:signatures] = new_jwt.fetch(:signatures, []).reject do |jws|
-            jws.dig(:header, :kid) == key_id
+            jws.fetch(:header).fetch(:kid) == key_id
           end
         end
       end
