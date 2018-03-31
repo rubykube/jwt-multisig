@@ -5,6 +5,7 @@ require "jwt"
 require "openssl"
 require "active_support/core_ext/hash/keys"
 require "active_support/core_ext/hash/slice"
+require "active_support/core_ext/hash/indifferent_access"
 
 module JWT
   #
@@ -39,8 +40,11 @@ module JWT
       # @raise [JWT::EncodeError]
       def generate_jwt(payload, private_keychain, algorithms)
         proxy_exception JWT::EncodeError do
+          algorithms_mapping = algorithms.with_indifferent_access
           { payload:    base64_encode(payload.to_json),
-            signatures: private_keychain.map { |id, value| generate_jws(payload, id, value, algorithms.fetch(id)) } }
+            signatures: private_keychain.map do |id, value|
+              generate_jws(payload, id, value, algorithms_mapping.fetch(id))
+            end }
         end
       end
 
@@ -118,6 +122,7 @@ module JWT
       # @raise [JWT::DecodeError]
       def verify_jwt(jwt, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
+          keychain           = public_keychain.with_indifferent_access
           serialized_payload = base64_decode(jwt.fetch("payload"))
           payload            = JSON.parse(serialized_payload)
           verified           = []
@@ -125,7 +130,7 @@ module JWT
 
           jwt.fetch("signatures").each do |jws|
             key_id = jws.fetch("header").fetch("kid")
-            if public_keychain.key?(key_id)
+            if keychain.key?(key_id)
               verify_jws(jws, payload, public_keychain, options)
               verified << key_id
             else
@@ -195,7 +200,7 @@ module JWT
           serialized_payload = payload.to_json
           encoded_payload    = base64_encode(serialized_payload)
           signature          = jws.fetch("signature")
-          public_key         = public_keychain.fetch(jws.fetch("header").fetch("kid"))
+          public_key         = public_keychain.with_indifferent_access.fetch(jws.fetch("header").fetch("kid"))
           jwt                = [encoded_header, encoded_payload, signature].join(".")
           algorithm          = JSON.parse(serialized_header).fetch("alg")
           JWT.decode(jwt, to_pem_or_key(public_key, algorithm), true, options.merge(algorithms: [algorithm])).first

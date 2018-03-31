@@ -31,6 +31,15 @@ class JWTVerificatorTest < Test::Unit::TestCase
     example jwt, {}, {}, %({"payload":{"xxx":"zzz"},"verified":[],"unverified":["hoegerrenner.info","powlowski.info"]})
   end
 
+  def test_both_symbols_and_strings_are_supported
+    jwt      = %({"payload":"eyJpc3MiOiJmb28iLCJiYXIiOnsiYmF6IjoicXV4In19","signatures":[{"protected":"eyJhbGciOiJIUzUxMiJ9","header":{"kid":"ebert.biz"},"signature":"1koPnSwejNF5aCRsqlySX9Td7_gc-dfUkko5G0Svccw-WkBYrwoJJwRJ2Op_-OxjoqSe3ViBGGCbgVUz0khuJQ"},{"protected":"eyJhbGciOiJIUzI1NiJ9","header":{"kid":"wisoky.co"},"signature":"AqtFKTlaVDqg2dOfLBODMhcBlg1gm9ejn6hYQynTyto"},{"protected":"eyJhbGciOiJSUzM4NCJ9","header":{"kid":"hoegerrenner.info"},"signature":"LR9TpJTLwgducdCkN1KmfwXXxd3pp7Xe5fJXJZZM8FVrFrVOEAGQcPnMPIgfPA1UckIXnzih46j4qPOQdotVHEvYvUuvLLT8QQi8y6-vBMlsP-cQehKGpI1T4N5qPzvJqPmhVzZYedWzlvr-VV9wd0BYeBgr65m9BSpFjLFhWVH4NJZuHFPxeYuDEpYoM-lPHdTzdf1E8xd_xwbpz9WpNh0MQib387-wakGWz-UGt9BmJLU8KV01FTAoR0EO9rQfIm5HQ3wGQ7t8U4N4HsOmsXkWF_fRgxjhMHeChDES2awwB4G4KCNw-6ezSBCD7FZcxzbCL2657OEPHNuHA36M91j54jjm1tweYhYJxuUOk5c8j_wSxtieeaORCxOrPp3mshHS_FE0sI_TNNBsIDI_sQwiS08y3d6tv7H4a_MZj_Pe7JWJ3TXlcsaSHy3xuSLYxCZQeLBwJtyz2ERCZOA9ew0BY34tpRwDKxbgF51X7t7uilYxnBn2rBdQeWQKb9q2"}]})
+    keychain = {
+      "hoegerrenner.info": public_keychain["hoegerrenner.info"],
+      "wisoky.co": public_keychain["wisoky.co"],
+      "ebert.biz" => public_keychain["ebert.biz"] }
+    example jwt, keychain, { iss: "foo" }, %({"payload":{"iss":"foo","bar":{"baz":"qux"}},"verified":["ebert.biz","wisoky.co","hoegerrenner.info"],"unverified":[]})
+  end
+
 private
 
   def example(jwt, keychain, options, expected)
