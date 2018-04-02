@@ -138,8 +138,8 @@ module JWT
             end
           end
           { payload:    payload.deep_symbolize_keys,
-            verified:   verified.uniq,
-            unverified: unverified.uniq }
+            verified:   verified.uniq.map(&:to_sym),
+            unverified: unverified.uniq.map(&:to_sym) }
         end
       end
 
