@@ -116,8 +116,8 @@ module JWT
       #   The returning value contains payload, list of verified, and unverified signatures (key ID).
       #   Example:
       #     { payload:    { sub: "session", profile: { email: "username@mailbox.example" },
-      #       verified:   ["backend-1.mycompany.example", "backend-3.mycompany.example"],
-      #       unverified: ["backend-2.mycompany.example"] }
+      #       verified:   [:"backend-1.mycompany.example", :"backend-3.mycompany.example"],
+      #       unverified: [:"backend-2.mycompany.example"] }
       #     }
       # @raise [JWT::DecodeError]
       def verify_jwt(jwt, public_keychain, options = {})
