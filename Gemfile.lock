@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jwt-multisig (1.0.0.beta.3)
+    jwt-multisig (1.0.0)
       activesupport (>= 4.0, < 6.0)
       jwt (~> 2.1)
 
