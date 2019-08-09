@@ -1,27 +1,27 @@
 PATH
   remote: .
   specs:
-    jwt-multisig (1.0.0)
+    jwt-multisig (1.0.1)
       activesupport (>= 4.0, < 6.0)
-      jwt (~> 2.1)
+      jwt (~> 2.2)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.1.6)
+    activesupport (5.2.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    concurrent-ruby (1.0.5)
-    i18n (1.0.0)
+    concurrent-ruby (1.1.5)
+    i18n (1.6.0)
       concurrent-ruby (~> 1.0)
-    jwt (2.1.0)
+    jwt (2.2.1)
     memoist (0.16.0)
     minitest (5.11.3)
-    power_assert (1.1.1)
-    rake (12.3.1)
-    test-unit (3.2.7)
+    power_assert (1.1.4)
+    rake (12.3.3)
+    test-unit (3.3.3)
       power_assert
     thread_safe (0.3.6)
     tzinfo (1.2.5)
@@ -31,11 +31,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.16)
+  bundler (~> 1.17)
   jwt-multisig!
   memoist (~> 0.16)
   rake (~> 12.3)
   test-unit (~> 3.1)
 
 BUNDLED WITH
-   1.16.1
+   1.17.2
