@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
   s.require_paths   = ["lib"]
 
   s.add_dependency             "jwt",           "~> 2.2"
-  s.add_dependency             "activesupport", ">= 4.0", "< 6.0"
+  s.add_dependency             "activesupport", ">= 4.0"
   s.add_development_dependency "bundler",       "~> 1.17"
 end
