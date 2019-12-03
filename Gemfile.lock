@@ -18,16 +18,16 @@ GEM
     i18n (1.7.0)
       concurrent-ruby (~> 1.0)
     jwt (2.2.1)
-    memoist (0.16.0)
+    memoist (0.16.1)
     minitest (5.13.0)
-    power_assert (1.1.4)
+    power_assert (1.1.5)
     rake (12.3.3)
-    test-unit (3.3.3)
+    test-unit (3.3.4)
       power_assert
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    zeitwerk (2.2.1)
+    zeitwerk (2.2.2)
 
 PLATFORMS
   ruby
