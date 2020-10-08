@@ -1,0 +1,29 @@
+---
+kind: pipeline
+name: default
+
+steps:
+  - name: Run tests
+    image: ruby:2.6
+    commands:
+      - bundle install
+      - bundle exec rake test
+
+  - name: Release gems
+    image: ruby:2.6
+    environment:
+      GEM_CREDENTIALS:
+        from_secret: gem_credentials
+    commands:
+      - mkdir -p ~/.gem
+      - echo $GEM_CREDENTIALS | base64 -d > ~/.gem/credentials
+      - chmod 0600 ~/.gem/credentials
+      - gem build jwt-multisig.gemspec
+      - gem push jwt-multisig-*.gem
+    when:
+      branch:
+        - master
+
+trigger:
+  event:
+    - push
