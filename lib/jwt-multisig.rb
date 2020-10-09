@@ -123,6 +123,7 @@ module JWT
       def verify_jwt(jwt, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
           keychain           = public_keychain.with_indifferent_access
+          encoded_payload    = jwt.fetch("payload")
           serialized_payload = base64_decode(jwt.fetch("payload"))
           payload            = JSON.parse(serialized_payload)
           verified           = []
@@ -131,7 +132,7 @@ module JWT
           jwt.fetch("signatures").each do |jws|
             key_id = jws.fetch("header").fetch("kid")
             if keychain.key?(key_id)
-              verify_jws(jws, payload, public_keychain, options)
+              verify_jws(jws, encoded_payload, public_keychain, options)
               verified << key_id
             else
               unverified << key_id
@@ -193,12 +194,10 @@ module JWT
       # @return [Hash]
       #   Returns payload if signature is valid.
       # @raise [JWT::DecodeError]
-      def verify_jws(jws, payload, public_keychain, options = {})
+      def verify_jws(jws, encoded_payload, public_keychain, options = {})
         proxy_exception JWT::DecodeError do
           encoded_header     = jws.fetch("protected")
           serialized_header  = base64_decode(encoded_header)
-          serialized_payload = payload.to_json
-          encoded_payload    = base64_encode(serialized_payload)
           signature          = jws.fetch("signature")
           public_key         = public_keychain.with_indifferent_access.fetch(jws.fetch("header").fetch("kid"))
           jwt                = [encoded_header, encoded_payload, signature].join(".")
