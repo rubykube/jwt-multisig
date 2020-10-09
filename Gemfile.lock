@@ -1,9 +1,14 @@
+GIT
+  remote: https://github.com/openware/ruby-jwt
+  revision: 5b146ee5d3d9266455a21e49e82febc1ab0d51b8
+  specs:
+    jwt (2.3.0.dev)
+
 PATH
   remote: .
   specs:
     jwt-multisig (1.0.4)
       activesupport (>= 4.0)
-      jwt (~> 2.2)
 
 GEM
   remote: https://rubygems.org/
@@ -17,7 +22,6 @@ GEM
     concurrent-ruby (1.1.7)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
-    jwt (2.2.2)
     memoist (0.16.2)
     minitest (5.14.2)
     power_assert (1.2.0)
@@ -34,6 +38,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.17)
+  jwt!
   jwt-multisig!
   memoist (~> 0.16)
   rake (~> 12.3)

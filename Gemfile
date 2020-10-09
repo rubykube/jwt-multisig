@@ -8,3 +8,4 @@ gemspec
 gem "rake",      "~> 12.3"
 gem "test-unit", "~> 3.1"
 gem "memoist",   "~> 0.16"
+gem 'jwt', git: 'https://github.com/openware/ruby-jwt'
