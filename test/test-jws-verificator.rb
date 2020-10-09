@@ -74,12 +74,13 @@ class JWSVerificatorTest < Test::Unit::TestCase
 private
 
   def example(jws, payload, options, expected)
+    encoded_payload = JWT::Base64.url_encode(JSON.dump(payload))
     # Pass instance of OpenSSL::PKey::PKey.
-    returned = JWT::Multisig.verify_jws(JSON.parse(jws), payload, public_keychain, options)
+    returned = JWT::Multisig.verify_jws(JSON.parse(jws), encoded_payload, public_keychain, options)
     assert_equal expected, JSON.dump(returned)
 
     # Pass key in PEM format.
-    returned = JWT::Multisig.verify_jws(JSON.parse(jws), payload, public_keychain, options)
+    returned = JWT::Multisig.verify_jws(JSON.parse(jws), encoded_payload, public_keychain, options)
     assert_equal expected, JSON.dump(returned)
   end
 end
