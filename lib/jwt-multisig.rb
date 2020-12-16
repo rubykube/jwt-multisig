@@ -41,7 +41,7 @@ module JWT
       def generate_jwt(payload, private_keychain, algorithms)
         proxy_exception JWT::EncodeError do
           algorithms_mapping = algorithms.with_indifferent_access
-          { payload:    base64_encode(payload.to_json),
+          { payload:    base64_encode(::JSON.dump(payload)),
             signatures: private_keychain.map do |id, value|
               generate_jws(payload, id, value, algorithms_mapping.fetch(id))
             end }
