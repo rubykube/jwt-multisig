@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency             "jwt",           "~> 2.2"
   s.add_dependency             "activesupport", ">= 4.0"
-  s.add_development_dependency "bundler",       "~> 1.17"
+  s.add_development_dependency "bundler",       "~> 2.4.7"
 end
