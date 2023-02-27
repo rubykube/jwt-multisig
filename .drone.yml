@@ -6,6 +6,7 @@ steps:
   - name: Run tests
     image: ruby:2.6
     commands:
+      - gem install bundler:2.4.7
       - bundle install
       - bundle exec rake test
 
