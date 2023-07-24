@@ -3,7 +3,7 @@ PATH
   specs:
     jwt-multisig (1.0.6)
       activesupport (>= 4.0)
-      jwt (~> 2.2)
+      jwt (~> 2.7)
 
 GEM
   remote: https://rubygems.org/
